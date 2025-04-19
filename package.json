@@ -1,0 +1,38 @@
+{
+  "name": "se2-intro",
+  "version": "1.0.0",
+  "description": "This is a Repo for the master class (SE2);",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint src",
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "prebuild": "rm -rf dist",
+    "build": "tsc",
+    "postbuild": "echo \"Finished build with size: $(du -sh dir | cut -f1)\"",
+    "prestart": "npm run build",
+    "start": "node dir/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RaydanAridiCS/SE2-intro.git"
+  },
+  "keywords": [],
+  "author": "Raydanaridi.cs",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/RaydanAridiCS/SE2-intro/issues"
+  },
+  "homepage": "https://github.com/RaydanAridiCS/SE2-intro#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.24.0",
+    "eslint": "^9.24.0",
+    "globals": "^16.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.29.1"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0"
+  }
+}
