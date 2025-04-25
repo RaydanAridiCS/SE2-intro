@@ -1,9 +1,18 @@
-import config from './config';
+import path from 'path';
+import { CsvParser } from './parsers/csvParser';
+import  logger from './util/logger';
 
-const firstName= "Raydan";
+const filePath = path.resolve(__dirname, './data/cake orders.csv');
 
-console.log("Hello from TypeScript!");
-console.log("My name is ", firstName);
+async function main() {
+    try {
+        const products = await CsvParser.readCsv(filePath);
+        for (const product of products) {
+            logger.info(product + '\n');
+        }
+    } catch (error) {
+        logger.error(error)
+    }
+}
 
-
-console.log('Hello, world!, the secret is ', config.SECRET);
+main();
