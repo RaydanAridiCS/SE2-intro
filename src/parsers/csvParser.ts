@@ -1,8 +1,4 @@
 import * as fs from 'fs';
-import * as path from 'path';
-
-const exampleFilePath = path.join(__dirname, '../data/"cake orders.csv"');
-console.log(`Example file path: ${exampleFilePath}`);
 
 export class CsvParser {
     // Method to read a CSV file and return a promise of 2D array of strings

@@ -47,7 +47,7 @@ describe('CsvParser', () => {
             const emptyFile = path.join(TEST_DIR, 'empty.csv');
             await fs.writeFile(emptyFile, '');
             const result = await CsvParser.readCsv(emptyFile);
-            expect(result).toEqual([['']]); // Single empty cell
+            expect(result).toEqual([['']]); 
             await fs.unlink(emptyFile);
         });
     });

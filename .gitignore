@@ -1,4 +1,6 @@
 .env
+.vscode
 build
 node_modules
 coverage
+logs
