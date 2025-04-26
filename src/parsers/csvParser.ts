@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 
 export class CsvParser {
+    
     // Method to read a CSV file and return a promise of 2D array of strings
     static async readCsv(filePath: string): Promise<string[][]> {
         return new Promise((resolve, reject) => {
