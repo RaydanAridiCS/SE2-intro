@@ -1,9 +1,9 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import { XmlParser } from '../src/parsers/xmlParser';
-import logger from '../src/util/logger';
+import { XmlParser } from '../../src/parsers/xmlParser';
+import logger from '../../src/util/logger';
 
-jest.mock('../src/util/logger', () => ({
+jest.mock('../../src/util/logger', () => ({
   info: jest.fn(),
   error: jest.fn()
 }));
