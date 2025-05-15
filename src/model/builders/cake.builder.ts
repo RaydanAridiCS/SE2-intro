@@ -3,7 +3,6 @@ import {Cake} from '../cake.model';
 
 export class CakeBuilder{
     
-    private id!: string;
     private type!: string;
     private flavor!: string;
     private filling!: string;
@@ -18,13 +17,12 @@ export class CakeBuilder{
     private allergies!: string;
     private specialIngredients!: string;
     private packagingType!: string;
-    private price!: number;
-    private quantity!: number;
 
-    public setId(id: string): this {
-        this.id = id;
-        return this;
+
+    static newBuilder(): CakeBuilder {
+        return new CakeBuilder();
     }
+
 
     public setType(type: string): this {
         this.type = type;
@@ -96,21 +94,11 @@ export class CakeBuilder{
         return this;
     }
 
-    public setPrice(price: number): this {
-        this.price = price;
-        return this;
-    }
-
-    public setQuantity(quantity: number): this {
-        this.quantity = quantity;
-        return this;
-    }
 
     public build(): Cake {
         const missingFields: string[] = [];
 
         const fieldsToCheck= {
-          id: this.id,
           type: this.type,
           flavor: this.flavor,
           filling: this.filling,
@@ -120,13 +108,12 @@ export class CakeBuilder{
           frostingFlavor: this.frostingFlavor,
           decorationType: this.decorationType,
           decorationColor: this.decorationColor,
-          customMessage: this.customMessage,
+          customMessage: this.customMessage || '',
           shape: this.shape,
           allergies: this.allergies,
           specialIngredients: this.specialIngredients,
           packagingType: this.packagingType,
-          price: this.price,
-          quantity: this.quantity,
+
         };
     
         for (const [fieldName, fieldValue] of Object.entries(fieldsToCheck)) {
@@ -142,7 +129,6 @@ export class CakeBuilder{
         }
 
         return new Cake(
-            this.id,
             this.type,
             this.flavor,
             this.filling,
@@ -157,8 +143,6 @@ export class CakeBuilder{
             this.allergies,
             this.specialIngredients,
             this.packagingType,
-            this.price,
-            this.quantity
         );
     }
 }
