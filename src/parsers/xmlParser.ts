@@ -42,8 +42,11 @@ export class XmlParser {
                 }
             }
 
+            // Skip the first line (column names)
+            const resultWithoutHeader = result.slice(1);
+
             logger.info(`Successfully parsed XML from: ${filePath}`);
-            return result;
+            return resultWithoutHeader;
             } catch (error) {
             const errorMessage = `Error parsing XML ${filePath}: ${
                 error instanceof Error ? error.message : error
