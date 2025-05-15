@@ -2,7 +2,6 @@ import {IItem, ItemCategory} from './interfaces/IItem';
 
 export class Book implements IItem {
 
-    private orderId: string;
     private bookTitle: string;
     private author: string;
     private genre: string;
@@ -11,11 +10,8 @@ export class Book implements IItem {
     private publisher: string;
     private specialEdition: string;
     private packaging: string;
-    private price: number;
-    private quantity: number;
 
     constructor(
-        orderId: string,
         bookTitle: string,
         author: string,
         genre: string,
@@ -23,11 +19,8 @@ export class Book implements IItem {
         language: string,
         publisher: string,
         specialEdition: string,
-        packaging: string,
-        price: number,
-        quantity: number
+        packaging: string
     ) {
-        this.orderId = orderId;
         this.bookTitle = bookTitle;
         this.author = author;
         this.genre = genre;
@@ -36,14 +29,10 @@ export class Book implements IItem {
         this.publisher = publisher;
         this.specialEdition = specialEdition;
         this.packaging = packaging;
-        this.price = price;
-        this.quantity = quantity;
+
     }
     getCategory(): ItemCategory {
         return ItemCategory.Book; 
-    }
-    getOrderId(): string {
-        return this.orderId;
     }
 
     getBookTitle(): string {
@@ -78,12 +67,5 @@ export class Book implements IItem {
         return this.packaging;
     }
 
-    getPrice(): number {
-        return this.price;
-    }
-
-    getQuantity(): number {
-        return this.quantity;
-    }
 
 }

@@ -3,7 +3,6 @@ import {Book} from '../book.model';
 
 export class BookBuilder {
 
-    private orderId!: string;
     private bookTitle!: string;
     private author!: string;
     private genre!: string;
@@ -12,13 +11,11 @@ export class BookBuilder {
     private publisher!: string;
     private specialEdition!: string;
     private packaging!: string;
-    private price!: number;
-    private quantity!: number;
 
-    public setOrderId(orderId: string): BookBuilder {
-        this.orderId = orderId;
-        return this;
+    static newBuilder(): BookBuilder {
+        return new BookBuilder();
     }
+
 
     public setBookTitle(bookTitle: string): BookBuilder {
         this.bookTitle = bookTitle;
@@ -60,21 +57,11 @@ export class BookBuilder {
         return this;
     }
 
-    public setPrice(price: number): BookBuilder {
-        this.price = price;
-        return this;
-    }
-
-    public setQuantity(quantity: number): BookBuilder {
-        this.quantity = quantity;
-        return this;
-    }
 
     public build(): Book {
         const missingFields: string[] = [];
 
         const fieldsToCheck = {
-            orderId: this.orderId,
             bookTitle: this.bookTitle,
             author: this.author,
             genre: this.genre,
@@ -83,8 +70,6 @@ export class BookBuilder {
             publisher: this.publisher,
             specialEdition: this.specialEdition,
             packaging: this.packaging,
-            price: this.price,
-            quantity: this.quantity
         };
 
         for (const [fieldName, fieldValue] of Object.entries(fieldsToCheck)) {
@@ -100,7 +85,6 @@ export class BookBuilder {
         }
 
         return new Book(
-            this.orderId,
             this.bookTitle,
             this.author,
             this.genre,
@@ -109,8 +93,6 @@ export class BookBuilder {
             this.publisher,
             this.specialEdition,
             this.packaging,
-            this.price,
-            this.quantity
         );
     }
 
