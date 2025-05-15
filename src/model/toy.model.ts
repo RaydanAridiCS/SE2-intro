@@ -1,6 +1,6 @@
-import { Item, ItemCategory } from './item.model';
+import { IItem, ItemCategory } from './interfaces/IItem';
 
-export class Toy implements Item {
+export class Toy implements IItem {
     private orderID: number;
     private type: string;
     private ageGroup: string;
