@@ -1,6 +1,6 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import { CsvParser } from '../src/parsers/csvParser'; 
+import { CsvParser } from '../../src/parsers/csvParser'; 
 
 // Test file paths
 const TEST_DIR = path.join(__dirname, 'test-data');

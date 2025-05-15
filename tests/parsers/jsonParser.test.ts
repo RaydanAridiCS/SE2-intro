@@ -1,4 +1,4 @@
-import { JsonParser } from '../src/parsers/jsonParser';
+import { JsonParser } from '../../src/parsers/jsonParser';
 import * as fs from 'fs';
 
 jest.mock('fs');
@@ -29,4 +29,5 @@ describe('JsonParser.readJson', () => {
     mockReadFile.mockResolvedValue(JSON.stringify({ a: 1 }));
     await expect(JsonParser.readJson('notarray.json')).rejects.toThrow('Invalid JSON format: expected an array of objects');
   });
+  
 });

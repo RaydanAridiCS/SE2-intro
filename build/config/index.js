@@ -7,7 +7,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 dotenv_1.default.config({ path: path_1.default.join(__dirname, '../../.env') });
 exports.default = {
-    env: process.env.NODE_ENV || 'development',
-    SECRET: process.env.SECRET
+    NODE_ENV: process.env.NODE_ENV || 'development',
+    logDir: 'logs',
 };
 //# sourceMappingURL=index.js.map
