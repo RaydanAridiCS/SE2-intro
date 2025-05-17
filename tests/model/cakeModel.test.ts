@@ -1,12 +1,11 @@
 import { Cake } from '../../src/model/cake.model';
-import { ItemCategory } from '../../src/model/item.model';
+import { ItemCategory } from '../../src/model/interfaces/IItem';
 
 describe('Cake', () => {
     let cake: Cake;
 
     beforeEach(() => {
         cake = new Cake(
-            '1',
             'Birthday Cake',
             'Chocolate',
             'Vanilla Cream',
@@ -20,9 +19,7 @@ describe('Cake', () => {
             'Round',
             'None',
             'Sprinkles',
-            'Box',
-            29.99,
-            1
+            'Box'
         );
     });
 
@@ -35,7 +32,6 @@ describe('Cake', () => {
     });
 
     test('should return correct properties', () => {
-        expect(cake.getId()).toBe('1');
         expect(cake.getType()).toBe('Birthday Cake');
         expect(cake.getFlavor()).toBe('Chocolate');
         expect(cake.getFilling()).toBe('Vanilla Cream');
@@ -50,7 +46,5 @@ describe('Cake', () => {
         expect(cake.getAllergies()).toBe('None');
         expect(cake.getSpecialIngredients()).toBe('Sprinkles');
         expect(cake.getPackagingType()).toBe('Box');
-        expect(cake.getPrice()).toBe(29.99);
-        expect(cake.getQuantity()).toBe(1);
     });
 });

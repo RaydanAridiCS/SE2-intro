@@ -29,5 +29,16 @@ describe('JsonParser.readJson', () => {
     mockReadFile.mockResolvedValue(JSON.stringify({ a: 1 }));
     await expect(JsonParser.readJson('notarray.json')).rejects.toThrow('Invalid JSON format: expected an array of objects');
   });
-  
+
+  it('should throw error when file content is empty string', async () => {
+    mockReadFile.mockResolvedValue('');
+    await expect(JsonParser.readJson('emptystring.json')).rejects.toThrow('Invalid JSON format: expected an array of objects');
+  });
+
+  it('should throw error for JSON array with non-object elements', async () => {
+    mockReadFile.mockResolvedValue(JSON.stringify([1, 2, 3]));
+    // Object.values(1) throws, so this should throw
+    await expect(JsonParser.readJson('arrayofnumbers.json')).rejects.toThrow();
+  });
+
 });

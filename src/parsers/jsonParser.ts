@@ -6,7 +6,6 @@ export class JsonParser {
         try {
             const data = await fs.promises.readFile(filePath, 'utf8');
             const jsonData = JSON.parse(data);
-            console.log(jsonData);
             if (!Array.isArray(jsonData)) {
                 throw new Error('Invalid JSON format: expected an array of objects');
             }
