@@ -9,6 +9,10 @@ export class CsvParser {
                 if (err) {
                     return reject(err);
                 }
+                if (!data.trim()) {
+                    // Handle empty file: return empty array
+                    return resolve([]);
+                }
                 const rows = data.split(/\r?\n/);
 
                 // Remove the last line if it's empty or just whitespace

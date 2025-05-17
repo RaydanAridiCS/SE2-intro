@@ -1,6 +1,6 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import { CsvParser } from '../../src/parsers/csvParser'; 
+import { CsvParser } from '../../src/parsers/csvParser';
 
 // Test file paths
 const TEST_DIR = path.join(__dirname, 'test-data');
@@ -18,7 +18,7 @@ describe('CsvParser', () => {
     beforeAll(async () => {
         // Create test directory if it doesn't exist
         await fs.mkdir(TEST_DIR, { recursive: true });
-        
+
         // Create test CSV file for reading tests
         await fs.writeFile(TEST_READ_FILE, TEST_DATA.map(row => row.join(',')).join('\n'));
     });
@@ -42,13 +42,49 @@ describe('CsvParser', () => {
             const nonExistentFile = path.join(TEST_DIR, 'nonexistent.csv');
             await expect(CsvParser.readCsv(nonExistentFile)).rejects.toThrow();
         });
-
-        it('should handle empty CSV file', async () => {
+        it('should handle empty CSV file (returns empty array)', async () => {
             const emptyFile = path.join(TEST_DIR, 'empty.csv');
             await fs.writeFile(emptyFile, '');
             const result = await CsvParser.readCsv(emptyFile);
-            expect(result).toEqual([['']]); 
+            expect(result).toEqual([]);
             await fs.unlink(emptyFile);
+        });
+    
+        it('should skip first line when skipFirstLine is true', async () => {
+            const result = await CsvParser.readCsv(TEST_READ_FILE, true);
+            expect(result).toEqual([
+                ['Alice', '30', 'New York'],
+                ['Bob', '25', 'London']
+            ]);
+        });
+    
+        it('should remove surrounding quotes from cells', async () => {
+            const quotedFile = path.join(TEST_DIR, 'quoted.csv');
+            const quotedData = [
+                ['"Name"', '"Age"', '"City"'],
+                ['"Alice"', '"30"', '"New York"'],
+                ['"Bob"', '"25"', '"London"']
+            ];
+            await fs.writeFile(quotedFile, quotedData.map(row => row.join(',')).join('\n'));
+            const result = await CsvParser.readCsv(quotedFile);
+            expect(result).toEqual([
+                ['Name', 'Age', 'City'],
+                ['Alice', '30', 'New York'],
+                ['Bob', '25', 'London']
+            ]);
+            await fs.unlink(quotedFile);
+        });
+    
+        it('should handle CSV file with trailing newline', async () => {
+            const trailingNewlineFile = path.join(TEST_DIR, 'trailing.csv');
+            const content = 'A,B,C\n1,2,3\n';
+            await fs.writeFile(trailingNewlineFile, content);
+            const result = await CsvParser.readCsv(trailingNewlineFile);
+            expect(result).toEqual([
+                ['A', 'B', 'C'],
+                ['1', '2', '3']
+            ]);
+            await fs.unlink(trailingNewlineFile);
         });
     });
 
@@ -70,14 +106,15 @@ describe('CsvParser', () => {
         it('should overwrite existing file', async () => {
             // First write
             await CsvParser.writeCsv(TEST_WRITE_FILE, [['Initial', 'Data']]);
-            
+
             // Second write with different data
             await CsvParser.writeCsv(TEST_WRITE_FILE, TEST_DATA);
-            
+
             // Verify second write took effect
             const fileContent = await fs.readFile(TEST_WRITE_FILE, 'utf8');
             expect(fileContent).not.toContain('Initial,Data');
             expect(fileContent).toContain('Alice,30,New York');
         });
     });
+
 });

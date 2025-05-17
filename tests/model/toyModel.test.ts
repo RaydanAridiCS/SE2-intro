@@ -1,20 +1,17 @@
 import { Toy } from '../../src/model/toy.model';
-import { ItemCategory } from '../../src/model/item.model';
+import { ItemCategory } from '../../src/model/interfaces//IItem';
 
 describe('Toy', () => {
     let toy: Toy;
 
     beforeEach(() => {
         toy = new Toy(
-            1,
             'Robot',
             '5-7 years',
             'LEGO',
             'Plastic',
             true,
-            true,
-            29.99,
-            2
+            true
         );
     });
 
@@ -24,10 +21,6 @@ describe('Toy', () => {
 
     test('should return correct category', () => {
         expect(toy.getCategory()).toBe(ItemCategory.Toy);
-    });
-
-    test('should return correct order ID', () => {
-        expect(toy.getOrderID()).toBe(1);
     });
 
     test('should return correct type', () => {
@@ -54,11 +47,4 @@ describe('Toy', () => {
         expect(toy.isEducational()).toBe(true);
     });
 
-    test('should return correct price', () => {
-        expect(toy.getPrice()).toBe(29.99);
-    });
-
-    test('should return correct quantity', () => {
-        expect(toy.getQuantity()).toBe(2);
-    });
 });

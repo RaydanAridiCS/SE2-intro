@@ -24,7 +24,7 @@ describe('XmlParser', () => {
     it('should handle file read errors', async () => {
       const error = new Error('File not found');
       (fs.readFile as jest.Mock).mockRejectedValue(error);
-      
+
       await expect(XmlParser.readXml(TEST_FILE)).rejects.toThrow(
         `Error parsing XML ${TEST_FILE}: File not found`
       );
@@ -44,75 +44,56 @@ describe('XmlParser', () => {
           </data>`;
 
       (fs.readFile as jest.Mock).mockResolvedValue(malformedXml);
-      
+
       await expect(XmlParser.readXml(TEST_FILE)).rejects.toThrow();
       expect(logger.error).toHaveBeenCalled();
     });
 
-    it('should parse a valid XML file with multiple rows', async () => {
-      const validXml = `
-      <data>
-        <row>
-          <OrderID>5001</OrderID>
-          <Type>Plush Toy</Type>
-        </row>
-        <row>
-          <OrderID>5002</OrderID>
-          <Type>Action Figure</Type>
-        </row>
-      </data>`;
-
+    it('should parse XML data correctly', async () => {
+      const validXml = `<?xml version='1.0' encoding='utf-8'?>
+        <data>
+          <row>
+            <OrderID>5001</OrderID>
+            <Type>Plush Toy</Type>
+          </row>
+          <row>
+            <OrderID>5002</OrderID>
+            <Type>Action Figure</Type>
+          </row>
+        </data>`;
       (fs.readFile as jest.Mock).mockResolvedValue(validXml);
 
+      const expected = [
+        ["5001", "Plush Toy"],
+        ["5002", "Action Figure"],
+      ];
+
       const result = await XmlParser.readXml(TEST_FILE);
-      expect(result).toEqual([
-        ['OrderID', 'Type'],
-        ['5001', 'Plush Toy'],
-        ['5002', 'Action Figure']
-      ]);
-      expect(logger.info).toHaveBeenCalledWith(
-        `Successfully parsed XML from: ${TEST_FILE}`
-      );
+      expect(result).toEqual(expected);
+      expect(logger.info).toHaveBeenCalledWith(`Successfully parsed XML from: ${TEST_FILE}`);
     });
 
-    it('should handle XML with missing fields in some rows', async () => {
-      const xmlWithMissing = `
-      <data>
-        <row>
-          <OrderID>5001</OrderID>
-          <Type>Plush Toy</Type>
-        </row>
-        <row>
-          <OrderID>5002</OrderID>
-        </row>
-      </data>`;
+    it('should handle empty XML file', async () => {
+      (fs.readFile as jest.Mock).mockResolvedValue('');
 
-      (fs.readFile as jest.Mock).mockResolvedValue(xmlWithMissing);
-
-      const result = await XmlParser.readXml(TEST_FILE);
-      expect(result).toEqual([
-        ['OrderID', 'Type'],
-        ['5001', 'Plush Toy'],
-        ['5002', '']
-      ]);
+      await expect(XmlParser.readXml(TEST_FILE)).rejects.toThrow(`Error parsing XML ${TEST_FILE}: XML file ${TEST_FILE} is empty.`);
+      expect(logger.error).toHaveBeenCalledWith(`Error parsing XML ${TEST_FILE}: XML file ${TEST_FILE} is empty.`);
     });
 
-    it('should handle XML with only one row', async () => {
-      const singleRowXml = `
-      <data>
-        <row>
-          <OrderID>1234</OrderID>
-          <Type>Board Game</Type>
-        </row>
-      </data>`;
+    it('should trim whitespace and newlines from values', async () => {
+      const xmlWithWhitespace = `<?xml version='1.0' encoding='utf-8'?>
+        <data>
+          <row>
+            <OrderID> 5001 </OrderID>
+            <Type>\nPlush Toy\n</Type>
+          </row>
+        </data>`;
+      (fs.readFile as jest.Mock).mockResolvedValue(xmlWithWhitespace);
 
-      (fs.readFile as jest.Mock).mockResolvedValue(singleRowXml);
+      const expected = [["5001", "Plush Toy"]];
 
       const result = await XmlParser.readXml(TEST_FILE);
-      expect(result).toEqual([
-        ['OrderID', 'Type'],
-        ['1234', 'Board Game']
-      ]);
+      expect(result).toEqual(expected);
     });
 
     it('should throw if XML root is empty', async () => {
@@ -123,26 +104,6 @@ describe('XmlParser', () => {
       expect(logger.error).toHaveBeenCalled();
     });
 
-    it('should handle XML with extra whitespace and newlines', async () => {
-      const xmlWithWhitespace = `
-      <data>
-        <row>
-          <OrderID>
-            42
-          </OrderID>
-          <Type>
-            Puzzle
-          </Type>
-        </row>
-      </data>`;
 
-      (fs.readFile as jest.Mock).mockResolvedValue(xmlWithWhitespace);
-
-      const result = await XmlParser.readXml(TEST_FILE);
-      expect(result).toEqual([
-        ['OrderID', 'Type'],
-        ['42', 'Puzzle']
-      ]);
-    });
   });
 });

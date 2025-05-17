@@ -10,7 +10,6 @@ describe('CakeBuilder', () => {
 
     it('should build a valid cake when all required fields are set', () => {
         const cake = builder
-            .setId('1')
             .setType('Birthday')
             .setFlavor('Chocolate')
             .setFilling('Vanilla')
@@ -25,13 +24,10 @@ describe('CakeBuilder', () => {
             .setAllergies('None')
             .setSpecialIngredients('None')
             .setPackagingType('Box')
-            .setPrice(50)
-            .setQuantity(1)
             .build();
 
         expect(cake).toBeInstanceOf(Cake);
         expect(cake).toEqual({
-            id: '1',
             type: 'Birthday',
             flavor: 'Chocolate',
             filling: 'Vanilla',
@@ -45,9 +41,7 @@ describe('CakeBuilder', () => {
             shape: 'Round',
             allergies: 'None',
             specialIngredients: 'None',
-            packagingType: 'Box',
-            price: 50,
-            quantity: 1
+            packagingType: 'Box'
         });
     });
 
@@ -56,7 +50,6 @@ describe('CakeBuilder', () => {
     });
 
     it('should allow method chaining', () => {
-        expect(builder.setId('1')).toBe(builder);
         expect(builder.setType('Birthday')).toBe(builder);
         expect(builder.setFlavor('Chocolate')).toBe(builder);
     });

@@ -22,7 +22,12 @@ export class XmlParser {
                 resolve(result);
                 });
             });
-
+            
+            // Check if XML is empty
+            if (!xmlData.trim()) {
+                throw new Error(`XML file ${filePath} is empty.`);
+            }
+            
             // Extract data and column names
             const rootKey = Object.keys(parsedData)[0];
             const items = parsedData[rootKey] as Record<string, Array<Record<string, string[]>>>;
