@@ -4,20 +4,19 @@ import { Toy } from '../toy.model';
 
 export class ToyBuilder {
 
-    private orderID!: number;
     private type!: string;
     private ageGroup!: string;
     private brand!: string;
     private material!: string;
     private batteryRequired!: boolean;
     private educational!: boolean;
-    private price!: number;
-    private quantity!: number;
 
-    setOrderID(orderID: number): this {
-        this.orderID = orderID;
-        return this;
+
+
+    static newBuilder(): ToyBuilder {
+        return new ToyBuilder();
     }
+
 
     setType(type: string): this {
         this.type = type;
@@ -49,28 +48,16 @@ export class ToyBuilder {
         return this;
     }
 
-    setPrice(price: number): this {
-        this.price = price;
-        return this;
-    }
-
-    setQuantity(quantity: number): this {
-        this.quantity = quantity;
-        return this;
-    }
     build(): Toy {
         const missingFields: string[] = [];
 
         const fieldsToCheck = {
-            orderID: this.orderID,
             type: this.type,
             ageGroup: this.ageGroup,
             brand: this.brand,
             material: this.material,
             batteryRequired: this.batteryRequired,
-            educational: this.educational,
-            price: this.price,
-            quantity: this.quantity
+            educational: this.educational
         };
 
         for (const [fieldName, fieldValue] of Object.entries(fieldsToCheck)) {
@@ -86,15 +73,12 @@ export class ToyBuilder {
         }
 
         return new Toy(
-            this.orderID,
             this.type,
             this.ageGroup,
             this.brand,
             this.material,
             this.batteryRequired,
             this.educational,
-            this.price,
-            this.quantity
         );
     }
 }

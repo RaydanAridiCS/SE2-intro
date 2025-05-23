@@ -1,9 +1,8 @@
 import { Book } from '../../src/model/book.model';
-import { ItemCategory } from '../../src/model/item.model';
+import { ItemCategory } from '../../src/model/interfaces/IItem';
 
 describe('Book Model', () => {
     const testBook = new Book(
-        'order123',
         'Test Book',
         'Test Author',
         'Fiction',
@@ -11,9 +10,7 @@ describe('Book Model', () => {
         'English',
         'Test Publisher',
         'First Edition',
-        'Standard',
-        29.99,
-        1
+        'Standard'
     );
 
     test('should create a book instance', () => {
@@ -24,9 +21,6 @@ describe('Book Model', () => {
         expect(testBook.getCategory()).toBe(ItemCategory.Book);
     });
 
-    test('should return correct order ID', () => {
-        expect(testBook.getOrderId()).toBe('order123');
-    });
 
     test('should return correct book title', () => {
         expect(testBook.getBookTitle()).toBe('Test Book');
@@ -60,11 +54,4 @@ describe('Book Model', () => {
         expect(testBook.getPackaging()).toBe('Standard');
     });
 
-    test('should return correct price', () => {
-        expect(testBook.getPrice()).toBe(29.99);
-    });
-
-    test('should return correct quantity', () => {
-        expect(testBook.getQuantity()).toBe(1);
-    });
 });

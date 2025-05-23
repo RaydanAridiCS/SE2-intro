@@ -1,64 +1,50 @@
 import logger from "./util/logger";
-import { CakeBuilder } from "./model/builders/cake.builder";
-import { BookBuilder } from "./model/builders/book.builder";
-import { ToyBuilder } from "./model/builders/toy.builder";
+import { OrderMapper } from "./mappers/Order.mapper";
+
+import { JsonParser } from "./parsers/jsonParser";
+import { JsonBookMapper } from "./mappers/Book.mapper";
+
+import { CsvParser } from "./parsers/csvParser";
+import { CsvCakeMapper } from "./mappers/Cake.mapper";
+
+import { XmlParser } from "./parsers/xmlParser";
+import { XmlToyMapper } from "./mappers/Toy.mapper";
 
 async function main() {
-    // Instnace of a Cake
-    const cakeBuilder = new CakeBuilder();
-    const cake = cakeBuilder
-        .setId("1")
-        .setType("Birthday Cake")
-        .setFlavor("Chocolate")
-        .setFilling("Vanilla Cream")
-        .setSize(10)
-        .setLayers(2)
-        .setFrostingType("Buttercream")
-        .setFrostingFlavor("Chocolate")
-        .setDecorationType("Sprinkles")
-        .setDecorationColor("Rainbow")
-        .setCustomMessage("Happy Birthday!")
-        .setShape("Round")
-        .setAllergies("Nuts")
-        .setSpecialIngredients("None")
-        .setPackagingType("Box")
-        .setPrice(29.99)
-        .setQuantity(1)
-        .build();
-    logger.info("Cake created successfully", cake);
+     
+    const cakeData = await CsvParser.readCsv('src/data/cake orders.csv', true);
+    const cakeMapper = new CsvCakeMapper();
+    const cakeOrderMapper = new OrderMapper(cakeMapper);
+    const cakeOrders = cakeData.map(row => cakeOrderMapper.map(row));
 
-    // Instance of a Book
-    const bookBuilder = new BookBuilder();
-    const book = bookBuilder
-        .setOrderId("2")
-        .setBookTitle("The Great Gatsby")
-        .setAuthor("F. Scott Fitzgerald")
-        .setGenre("Fiction")
-        .setFormat("Hardcover")
-        .setLanguage("English")
-        .setPublisher("Scribner")
-        .setSpecialEdition("Collector's Edition")
-        .setPackaging("Gift Wrap")
-        .setPrice(19.99)
-        .setQuantity(1)
-        .build();
-    logger.info("Book created successfully", book);
+    cakeOrders.forEach(order => {
+        logger.info("%o", order);
+    });
 
-    // Instance of a Toy
-    const toyBuilder = new ToyBuilder();
-    const toy = toyBuilder
-        .setOrderID(3)
-        .setType("Action Figure")
-        .setAgeGroup("6-12")
-        .setBrand("LEGO")
-        .setMaterial("Plastic")
-        .setBatteryRequired(false)
-        .setEducational(true)
-        .setPrice(49.99)
-        .setQuantity(1)
-        .build();
-    logger.info("Toy created successfully", toy);
+    
+
+    const toyData = await XmlParser.readXml('src/data/toy orders.xml');
+    const toyMapper = new XmlToyMapper();
+    const toyOrderMapper = new OrderMapper(toyMapper);
+    const toyOrders = toyData.map(row => toyOrderMapper.map(row));
+
+    toyOrders.forEach(order => {
+        logger.info("%o", order);
+    });
+
+
+    const bookData = await JsonParser.readJson('src/data/book orders.json');
+    const bookMapper = new JsonBookMapper();
+    const bookOrderMapper = new OrderMapper(bookMapper);
+    const bookOrders = bookData.map(row => bookOrderMapper.map(row));
+
+    bookOrders.forEach(order => {
+        logger.info("%o", order);
+    });
+
 
 }
+
+
 
 main();

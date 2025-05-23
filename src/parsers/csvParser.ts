@@ -2,15 +2,33 @@ import * as fs from 'fs';
 
 export class CsvParser {
     
-    // Method to read a CSV file and return a promise of 2D array of strings
-    static async readCsv(filePath: string): Promise<string[][]> {
+    // Method to read a CSV file and return a promise of array of row strings, removing surrounding quotes
+    static async readCsv(filePath: string, skipFirstLine: boolean = false): Promise<string[][]> {
         return new Promise((resolve, reject) => {
             fs.readFile(filePath, 'utf8', (err, data) => {
                 if (err) {
                     return reject(err);
                 }
-                const rows = data.split('\n').map(row => row.split(','));
-                resolve(rows);
+                if (!data.trim()) {
+                    // Handle empty file: return empty array
+                    return resolve([]);
+                }
+                const rows = data.split(/\r?\n/);
+
+                // Remove the last line if it's empty or just whitespace
+                if (rows.length > 0 && rows[rows.length - 1].trim() === '') {
+                    rows.pop();
+                }
+
+                let parsedRows = rows.map(row =>
+                    row.split(',').map(cell =>
+                        cell.replace(/^"(.*)"$/, '$1').trim()
+                    )
+                );
+                if (skipFirstLine) {
+                    parsedRows = parsedRows.slice(1);
+                }
+                resolve(parsedRows);
             });
         });
     }

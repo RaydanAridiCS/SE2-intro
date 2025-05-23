@@ -1,43 +1,31 @@
-import { Item, ItemCategory } from './item.model';
+import { IItem, ItemCategory } from './interfaces/IItem';
 
-export class Toy implements Item {
-    private orderID: number;
+export class Toy implements IItem {
     private type: string;
     private ageGroup: string;
     private brand: string;
     private material: string;
     private batteryRequired: boolean;
     private educational: boolean;
-    private price: number;
-    private quantity: number;
 
     constructor(
-        orderID: number,
         type: string,
         ageGroup: string,
         brand: string,
         material: string,
         batteryRequired: boolean,
-        educational: boolean,
-        price: number,
-        quantity: number
+        educational: boolean
     ) {
-        this.orderID = orderID;
         this.type = type;
         this.ageGroup = ageGroup;
         this.brand = brand;
         this.material = material;
         this.batteryRequired = batteryRequired;
         this.educational = educational;
-        this.price = price;
-        this.quantity = quantity;
     }
 
     getCategory(): ItemCategory {
         return ItemCategory.Toy;
-    }
-    getOrderID(): number {
-        return this.orderID;
     }
 
     getType(): string {
@@ -64,11 +52,4 @@ export class Toy implements Item {
         return this.educational;
     }
 
-    getPrice(): number {
-        return this.price;
-    }
-
-    getQuantity(): number {
-        return this.quantity;
-    }
 }
