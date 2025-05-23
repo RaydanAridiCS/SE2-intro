@@ -17,4 +17,16 @@ export class JsonBookMapper implements IMapper<string[], Book> {
             .build();
 
     }
+    reverseMap(data: Book): string[] {
+        return [
+            data.getBookTitle(),
+            data.getAuthor(),
+            data.getGenre(),
+            data.getFormat(),
+            data.getLanguage(),
+            data.getPublisher(),
+            data.getSpecialEdition(),
+            data.getPackaging()
+        ];
+    }
 }
