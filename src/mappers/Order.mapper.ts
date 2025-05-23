@@ -17,5 +17,14 @@ export class OrderMapper implements IMapper<string[], IOrder> {
             .setItem(item)
             .build();
     }
+    reverseMap(data: IOrder): string[] {
+        const item: string[] = this.itemMapper.reverseMap(data.getItem());
+        return [
+            data.getId(),
+            ...item,
+            data.getPrice().toString(),
+            data.getQuantity().toString()
+        ];
+    }
 }
 
